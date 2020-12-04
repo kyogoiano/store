@@ -1,0 +1,45 @@
+
+dependencies {
+
+    implementation("io.micronaut:micronaut-http-client:${micronautVersion}")
+    annotationProcessor "io.micronaut:micronaut-inject-java:${micronautVersion}"
+    annotationProcessor "io.micronaut.configuration:micronaut-openapi:${micronautOpenApiVersion}"
+    implementation "io.swagger.core.v3:swagger-annotations:2.1.5"
+    implementation "io.micronaut:micronaut-inject-java:${micronautVersion}"
+    implementation project(":api")
+    implementation "io.micronaut:micronaut-http-server-netty:${micronautVersion}"
+    implementation ("io.netty:netty-handler-proxy:${nettyVersion}")
+
+    implementation "io.micronaut.beanvalidation:micronaut-hibernate-validator:2.0.1"
+    implementation "io.micronaut.mongodb:micronaut-mongo-reactive:3.1.0"
+    implementation "org.mongodb:mongodb-driver-core:4.1.1"
+    implementation "org.mongodb:mongodb-driver-reactivestreams:4.1.1"
+    implementation "io.micronaut:micronaut-runtime:${micronautVersion}"
+
+
+    annotationProcessor "org.projectlombok:lombok:${lombokVersion}"
+    compileOnly "org.projectlombok:lombok:${lombokVersion}"
+
+    testAnnotationProcessor("io.micronaut:micronaut-inject-java:${micronautVersion}")
+
+    testImplementation("org.junit.jupiter:junit-jupiter-api")
+    testImplementation("io.micronaut.test:micronaut-test-junit5:2.2.1")
+    testImplementation("org.mockito:mockito-core:${mockitoVersion}")
+    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine")
+//    testRuntimeOnly("de.flapdoodle.embed:de.flapdoodle.embed.mongo:2.2.0")
+
+}
+
+compileJava {
+    options.compilerArgs += ["-parameters"]
+}
+
+mainClassName = "org.leandro.inventory.Application"
+// use JUnit 5 platform
+test {
+    useJUnitPlatform()
+}
+
+shadowJar {
+    mergeServiceFiles()
+}

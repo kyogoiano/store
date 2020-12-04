@@ -1,0 +1,8 @@
+rootProject.name = 'store'
+include "api"
+include "management"
+include "catalogue"
+include "inventory"
+include "recommendations"
+include 'api'
+

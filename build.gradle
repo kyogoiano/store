@@ -1,0 +1,53 @@
+allprojects {
+    repositories {
+        jcenter()
+        maven { url 'https://projectlombok.org/edge-releases' }
+        maven {
+            url "https://repo1.maven.org/maven2/"
+        }
+    }
+}
+
+buildscript {
+    repositories {
+        maven {
+            url "https://plugins.gradle.org/m2/"
+        }
+        maven {
+            url "https://repo1.maven.org/maven2/"
+        }
+    }
+    dependencies {
+        classpath "com.github.jengelman.gradle.plugins:shadow:6.1.0"
+    }
+}
+
+group 'org.leandro'
+version '1.0-SNAPSHOT'
+
+subprojects { project ->
+
+    apply plugin:"java"
+
+        if(project.name != 'api') {
+            apply plugin:"application"
+            apply plugin: 'com.github.johnrengelman.shadow'
+            shadowJar {
+                mergeServiceFiles()
+            }
+        }
+
+        dependencies {
+            if(project.name != 'api') {
+                implementation "io.micronaut:micronaut-discovery-client:2.0.1"
+                implementation("io.micronaut:micronaut-http-client:${micronautVersion}")
+                implementation ("io.netty:netty-handler-proxy:${nettyVersion}")
+                implementation ("io.netty:netty-codec-http2:${nettyVersion}")
+                annotationProcessor "io.micronaut:micronaut-validation:${micronautVersion}"
+                implementation "io.micronaut:micronaut-validation:${micronautVersion}"
+
+                runtimeOnly "io.micronaut:micronaut-management:${micronautVersion}"
+                runtimeOnly "org.apache.logging.log4j:log4j-slf4j-impl:2.14.0"
+            }
+        }
+}

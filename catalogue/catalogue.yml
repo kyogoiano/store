@@ -1,0 +1,124 @@
+openapi: 3.0.1
+info:
+  title: Catalogue
+  description: Catalogue API
+  contact:
+    name: Leandro
+    url: https://www.linkedin.com/in/leandroca/
+    email: leandro.ueg@gmail.com
+  license:
+    name: Apache 2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0
+  version: v1.0
+tags:
+- name: Conference
+- name: Route
+paths:
+  /${catalogue.api.version}/catalogue:
+    get:
+      operationId: list
+      parameters: []
+      responses:
+        default:
+          description: list default response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CatalogueEntity'
+    post:
+      operationId: save
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CatalogueEntity'
+        required: true
+      responses:
+        default:
+          description: save default response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CatalogueEntity'
+  /${catalogue.api.version}/catalogue/vendor/{name}:
+    get:
+      operationId: byVendor
+      parameters:
+      - name: name
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        default:
+          description: byVendor default response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CatalogueEntity'
+  /${catalogue.api.version}/catalogue/type/{name}:
+    get:
+      operationId: byType
+      parameters:
+      - name: name
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        default:
+          description: byType default response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CatalogueEntity'
+  /${catalogue.api.version}/catalogue/{title}:
+    get:
+      operationId: find
+      parameters:
+      - name: title
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        default:
+          description: find default response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CatalogueEntity'
+components:
+  schemas:
+    Product:
+      required:
+      - title
+      type: object
+      properties:
+        title:
+          minLength: 1
+          type: string
+        description:
+          type: string
+        vendor:
+          type: string
+        type:
+          $ref: '#/components/schemas/ProductType'
+    ProductType:
+      type: string
+      enum:
+      - FOOD
+      - AUTOMOBILE
+      - FURNITURE
+      - UNDEFINED
+    CatalogueEntity:
+      type: object
+      allOf:
+      - $ref: '#/components/schemas/Product'
