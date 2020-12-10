@@ -16,7 +16,9 @@ dependencies {
     implementation "org.mongodb:mongodb-driver-core:4.1.1"
     implementation "org.mongodb:mongodb-driver-reactivestreams:4.1.1"
     implementation "io.micronaut:micronaut-runtime:${micronautVersion}"
-
+    implementation "software.amazon.awssdk:dynamodb:2.15.38"
+    implementation "cloud.localstack:localstack-utils:0.2.5"
+    testCompile "com.amazonaws:DynamoDBLocal:1.13.5"
 
     annotationProcessor "org.projectlombok:lombok:${lombokVersion}"
     compileOnly "org.projectlombok:lombok:${lombokVersion}"

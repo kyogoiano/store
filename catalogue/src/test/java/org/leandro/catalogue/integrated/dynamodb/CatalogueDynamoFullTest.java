@@ -1,28 +1,25 @@
-package org.leandro.catalogue.integrated;
+package org.leandro.catalogue.integrated.dynamodb;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.mongodb.ConnectionString;
-import com.mongodb.MongoClientSettings;
-import com.mongodb.reactivestreams.client.MongoClient;
-import com.mongodb.reactivestreams.client.MongoClients;
 import io.micronaut.context.ApplicationContext;
 import io.micronaut.context.annotation.Value;
-import io.micronaut.http.*;
+import io.micronaut.http.HttpRequest;
+import io.micronaut.http.HttpResponse;
+import io.micronaut.http.HttpStatus;
+import io.micronaut.http.MediaType;
 import io.micronaut.http.client.RxHttpClient;
 import io.micronaut.http.client.annotation.Client;
 import io.micronaut.http.client.exceptions.HttpClientResponseException;
 import io.micronaut.http.hateoas.JsonError;
-import io.micronaut.test.annotation.MicronautTest;
-import io.reactivex.Flowable;
-import org.junit.jupiter.api.AfterEach;
+import io.micronaut.test.extensions.junit5.annotation.MicronautTest;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.leandro.api.v1.model.ProductType;
 import org.leandro.catalogue.Application;
 import org.leandro.catalogue.integrated.controller.entity.CatalogueEntity;
-import org.leandro.catalogue.service.CatalogueConfiguration;
 import org.leandro.catalogue.util.FriendlyUrl;
 
 import javax.inject.Inject;
@@ -30,9 +27,10 @@ import java.nio.charset.Charset;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@TestMethodOrder(value=MethodOrderer.Alphanumeric.class)
+@TestMethodOrder(value=MethodOrderer.MethodName.class)
 @MicronautTest(application = Application.class)
-public class CatalogueFullTest {
+@ExtendWith(LocalDynamoDbExtension.class)
+public class CatalogueDynamoFullTest {
 
     @Inject
     ApplicationContext applicationContext;
@@ -46,25 +44,6 @@ public class CatalogueFullTest {
 
     @Inject
     ObjectMapper objectMapper;
-
-    static String connectionString = "mongodb://leandro:123@0.0.0.0:27017/catalogue_db";
-
-    @AfterEach
-    public void cleanupData() {
-
-        final ConnectionString connString = new ConnectionString(connectionString);
-        final MongoClientSettings settings = MongoClientSettings.builder()
-                .applyConnectionString(connString)
-                .retryWrites(true)
-                .build();
-        final MongoClient mongoClient = MongoClients.create(settings);
-
-        final CatalogueConfiguration config = applicationContext.getBean(CatalogueConfiguration.class);
-        // drop the data
-        Flowable.fromPublisher(
-                mongoClient.getDatabase(config.getDatabaseName()).getCollection(config.getCollectionName()).drop())
-                .blockingSubscribe();
-    }
 
     @Test
     public void testListProducts() throws JsonProcessingException {

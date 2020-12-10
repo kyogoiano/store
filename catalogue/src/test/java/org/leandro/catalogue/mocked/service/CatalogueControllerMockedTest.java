@@ -1,24 +1,19 @@
 package org.leandro.catalogue.mocked.service;
 
-import com.mongodb.reactivestreams.client.FindPublisher;
-import io.micronaut.test.annotation.MicronautTest;
 import io.micronaut.test.annotation.MockBean;
-import io.reactivex.*;
-import io.reactivex.observers.TestObserver;
+import io.micronaut.test.extensions.junit5.annotation.MicronautTest;
+import io.reactivex.Flowable;
 import io.reactivex.subscribers.TestSubscriber;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
-import org.leandro.api.v1.model.Product;
 import org.leandro.api.v1.model.ProductType;
 import org.leandro.catalogue.Application;
 import org.leandro.catalogue.integrated.controller.CatalogueController;
 import org.leandro.catalogue.integrated.controller.entity.CatalogueEntity;
 import org.leandro.catalogue.service.CatalogueService;
-import org.leandro.catalogue.service.CatalogueServiceImpl;
-import org.leandro.catalogue.util.FriendlyUrl;
+import org.leandro.catalogue.service.aws.CatalogueServiceDynamoDBImpl;
 import org.mockito.ArgumentCaptor;
-import org.mockito.Mock;
 import org.reactivestreams.Publisher;
 import org.reactivestreams.Subscriber;
 
@@ -27,13 +22,12 @@ import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
 import java.util.List;
 import java.util.Set;
-import java.util.concurrent.Flow;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.Mockito.*;
 
-import static org.junit.jupiter.api.Assertions.*;
-
-@TestMethodOrder(value=MethodOrderer.Alphanumeric.class)
+@TestMethodOrder(value=MethodOrderer.MethodName.class)
 @MicronautTest(application = Application.class)
 public class CatalogueControllerMockedTest {
 
@@ -43,7 +37,7 @@ public class CatalogueControllerMockedTest {
     @Inject
     CatalogueController catalogueController;
 
-    @MockBean(CatalogueServiceImpl.class)
+    @MockBean(CatalogueServiceDynamoDBImpl.class)
     CatalogueService<CatalogueEntity> catalogueService() {
         return mock(CatalogueService.class);
     }
@@ -51,12 +45,10 @@ public class CatalogueControllerMockedTest {
     @Test
     public void testListProducts() {
 
-        ArgumentCaptor<Subscriber<CatalogueEntity>> argumentCaptor =
+        ArgumentCaptor<Subscriber<Iterable<CatalogueEntity>>> argumentCaptor =
                 ArgumentCaptor.forClass(Subscriber.class);
 
-        Publisher<CatalogueEntity> publisherMock = mock(FindPublisher.class);
-
-        Flowable.fromPublisher(publisherMock).toList();
+        Publisher<List<CatalogueEntity>> publisherMock = mock(Flowable.class);
 
         publisherMock.subscribe(TestSubscriber.create());
 

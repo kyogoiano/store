@@ -5,7 +5,7 @@ import com.mongodb.MongoClientSettings;
 import com.mongodb.reactivestreams.client.MongoClient;
 import com.mongodb.reactivestreams.client.MongoClients;
 import io.micronaut.context.ApplicationContext;
-import io.micronaut.test.annotation.MicronautTest;
+import io.micronaut.test.extensions.junit5.annotation.MicronautTest;
 import io.reactivex.Flowable;
 import org.junit.jupiter.api.*;
 import org.leandro.api.v1.ProductOperations;

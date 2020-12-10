@@ -61,24 +61,6 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/CatalogueEntity'
-  /${catalogue.api.version}/catalogue/type/{name}:
-    get:
-      operationId: byType
-      parameters:
-      - name: name
-        in: path
-        required: true
-        schema:
-          type: string
-      responses:
-        default:
-          description: byType default response
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/CatalogueEntity'
   /${catalogue.api.version}/catalogue/{title}:
     get:
       operationId: find

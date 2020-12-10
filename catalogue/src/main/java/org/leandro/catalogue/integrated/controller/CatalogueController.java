@@ -28,22 +28,16 @@ public class CatalogueController implements ProductOperations<CatalogueEntity> {
     public Single<List<CatalogueEntity>> list() {
         return Flowable.fromPublisher(
                 service.findAll()
-        ).toList();
+        ).singleOrError();
     }
 
     @Override
     public Single<List<CatalogueEntity>> byVendor(String name) {
         return Flowable.fromPublisher(
                 service.findByVendorName(name)
-        ).toList();
+        ).singleOrError();
     }
 
-    @Override
-    public Single<List<CatalogueEntity>> byType(String name) {
-        return Flowable.fromPublisher(
-                service.findByType(name)
-        ).toList();
-    }
 
     @Override
     public Maybe<CatalogueEntity> find(String title) {

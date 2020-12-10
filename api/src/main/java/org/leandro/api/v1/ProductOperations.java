@@ -20,9 +20,6 @@ public interface ProductOperations<T extends Product> {
     @Get("/vendor/{name}")
     Single<List<T>> byVendor(String name);
 
-    @Get("/type/{name}")
-    Single<List<T>> byType(String name);
-
     @Get("/{title}")
     Maybe<T> find(String title);
 
