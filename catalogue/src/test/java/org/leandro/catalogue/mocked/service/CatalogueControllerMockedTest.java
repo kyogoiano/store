@@ -2,8 +2,8 @@ package org.leandro.catalogue.mocked.service;
 
 import io.micronaut.test.annotation.MockBean;
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest;
-import io.reactivex.Flowable;
-import io.reactivex.subscribers.TestSubscriber;
+import io.reactivex.rxjava3.core.Flowable;
+import io.reactivex.rxjava3.subscribers.TestSubscriber;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
@@ -68,14 +68,12 @@ public class CatalogueControllerMockedTest {
             when(catalogueService.save(any(CatalogueEntity.class)))
                     .thenThrow(new ConstraintViolationException(anySet()));
 
-            catalogueController.save(new CatalogueEntity("", "", "")).blockingGet();
+            catalogueController.save(new CatalogueEntity("", "", ""));
             fail("Should have thrown a constraint violation");
         } catch (ConstraintViolationException e) {
             assertEquals(e.getConstraintViolations().size(), 1);
             Set<ConstraintViolation<?>> violations = e.getConstraintViolations();
-            violations.forEach( constraintViolation -> {
-                assertEquals( constraintViolation.getInvalidValue(), "" );
-            });
+            violations.forEach( constraintViolation -> assertEquals( constraintViolation.getInvalidValue(), "" ));
         }
 //
 //        final CatalogueEntity entity = new CatalogueEntity("Fred", "Harry","photo-1457914109735-ce8aba3b7a79.jpeg")

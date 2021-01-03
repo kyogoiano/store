@@ -13,21 +13,24 @@ import io.micronaut.http.client.annotation.Client;
 import io.micronaut.http.client.exceptions.HttpClientResponseException;
 import io.micronaut.http.hateoas.JsonError;
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest;
-import org.junit.jupiter.api.MethodOrderer;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestMethodOrder;
+import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.leandro.api.v1.model.ProductType;
 import org.leandro.catalogue.Application;
 import org.leandro.catalogue.integrated.controller.entity.CatalogueEntity;
+import org.leandro.catalogue.service.aws.CatalogueConfigurationDynamoDB;
+import org.leandro.catalogue.service.aws.DynamoDBService;
 import org.leandro.catalogue.util.FriendlyUrl;
+import software.amazon.awssdk.services.dynamodb.model.ListTablesResponse;
 
 import javax.inject.Inject;
 import java.nio.charset.Charset;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeoutException;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@TestMethodOrder(value=MethodOrderer.MethodName.class)
+@TestMethodOrder(value=MethodOrderer.OrderAnnotation.class)
 @MicronautTest(application = Application.class)
 @ExtendWith(LocalDynamoDbExtension.class)
 public class CatalogueDynamoFullTest {
@@ -45,7 +48,23 @@ public class CatalogueDynamoFullTest {
     @Inject
     ObjectMapper objectMapper;
 
+    @Inject
+    DynamoDBService dynamoDBService;
+
+    @Inject
+    CatalogueConfigurationDynamoDB configuration;
+
+    @Order(0)
     @Test
+    void configureTable() throws InterruptedException, ExecutionException, TimeoutException {
+        System.out.println("Init dropped table ? :" + dynamoDBService.dropTable(configuration.getTableName()).get());
+        dynamoDBService.createTableIfNeeded().get();
+        ListTablesResponse response = dynamoDBService.listTables().get();
+        System.out.println(dynamoDBService.describeTable(response.tableNames().get(0)).get().table().toString());
+    }
+
+    @Test
+    @Order(1)
     public void testListProducts() throws JsonProcessingException {
 
         final HttpRequest<String> listRequest = HttpRequest.GET("/");
@@ -96,9 +115,10 @@ public class CatalogueDynamoFullTest {
     }
 
     @Test
-    public void testNextFindByVendor() throws JsonProcessingException {
+    @Order(2)
+    public void testNextFindByTitle() throws JsonProcessingException {
 
-        final CatalogueEntity entity = new CatalogueEntity("Fred", "Ron", "photo-1442605527737-ed62b867591f.jpeg")
+        final CatalogueEntity entity = new CatalogueEntity("Juan", "Ron", "photo-1442605527737-ed62b867591f.jpeg")
                 .type(ProductType.UNDEFINED);
 
         final String requestBody = objectMapper.writeValueAsString(entity);
@@ -107,6 +127,20 @@ public class CatalogueDynamoFullTest {
         final CatalogueEntity ron = objectMapper.readValue(ronResponseBody, CatalogueEntity.class);
 
         assertNotNull(ron);
+
+//        final HttpRequest<String> listRequest = HttpRequest.GET("/");
+//
+//
+//        final HttpRequest<String> byTitleRequest = HttpRequest.GET("/title/Ron");
+//        final String listResponseBody = rxHttpClient.toBlocking().retrieve(byTitleRequest);
+//        CatalogueEntity[] catalogueEntities = objectMapper.readValue(listResponseBody, CatalogueEntity[].class);
+//
+//        assertEquals(1, catalogueEntities.length);
+    }
+
+    @Test
+    @Order(3)
+    public void testNextFindByVendor() throws JsonProcessingException {
 
         final HttpRequest<String> byVendorRequest = HttpRequest.GET("/vendor/Fred");
         final String listResponseBody = rxHttpClient.toBlocking().retrieve(byVendorRequest);

@@ -9,6 +9,7 @@ import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 import javax.validation.constraints.NotBlank;
+import java.util.UUID;
 
 @Validated
 @EqualsAndHashCode
@@ -25,6 +26,8 @@ public class Product {
         this.title = title;
         this.description = description;
     }
+
+    UUID productId;
 
     @NotBlank
     String title;
@@ -45,5 +48,11 @@ public class Product {
         return this;
     }
 
+    public Product key(UUID productId) {
+        if(productId != null) {
+            this.productId = productId;
+        }
+        return this;
+    }
 
 }

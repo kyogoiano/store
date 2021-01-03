@@ -3,8 +3,8 @@ package org.leandro.catalogue.integrated.dynamodb.service;
 
 import io.micronaut.context.ApplicationContext;
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest;
-import io.reactivex.Flowable;
-import io.reactivex.internal.operators.single.SingleDetach;
+import io.reactivex.rxjava3.core.Flowable;
+import io.reactivex.rxjava3.internal.operators.single.SingleDetach;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
@@ -51,9 +51,7 @@ public class CatalogueServiceTest {
         } catch (ConstraintViolationException e) {
             assertEquals(e.getConstraintViolations().size(), 1);
             Set<ConstraintViolation<?>> violations = e.getConstraintViolations();
-            violations.forEach( constraintViolation -> {
-                assertEquals( constraintViolation.getInvalidValue(), "" );
-            });
+            violations.forEach( constraintViolation -> assertEquals( constraintViolation.getInvalidValue(), "" ));
         }
 
         final CatalogueEntity entity = new CatalogueEntity("Fred", "Harry","photo-1457914109735-ce8aba3b7a79.jpeg")

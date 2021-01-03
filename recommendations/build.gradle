@@ -5,6 +5,7 @@ dependencies {
     implementation project(":api")
     implementation "io.micronaut:micronaut-http-server-netty:${micronautVersion}"
     implementation "io.micronaut:micronaut-runtime:${micronautVersion}"
+    implementation "io.micronaut.rxjava3:micronaut-rxjava3:1.1.1"
     implementation "io.micronaut:micronaut-http-client:${micronautVersion}"
 
 
@@ -12,7 +13,7 @@ dependencies {
     compileOnly "org.projectlombok:lombok:${lombokVersion}"
 
     implementation "io.micronaut.redis:micronaut-redis-lettuce:3.1.0"
-    implementation "io.micronaut.cache:micronaut-cache-core:2.1.0"
+    implementation "io.micronaut.cache:micronaut-cache-core:2.2.0"
     implementation "io.lettuce:lettuce-core:6.0.1.RELEASE"
 
 }
@@ -31,7 +32,7 @@ configurations {
 configurations.all {
     resolutionStrategy {
         force 'io.netty:netty-*:${nettyVersion}'
-        force 'io.micronaut.cache:micronaut-cache-core:2.1.0'
+        force 'io.micronaut.cache:micronaut-cache-core:2.2.0'
     }
 }
 

@@ -6,7 +6,7 @@ import com.mongodb.reactivestreams.client.MongoClient;
 import com.mongodb.reactivestreams.client.MongoClients;
 import io.micronaut.context.ApplicationContext;
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest;
-import io.reactivex.Flowable;
+import io.reactivex.rxjava3.core.Flowable;
 import org.junit.jupiter.api.*;
 import org.leandro.api.v1.ProductOperations;
 import org.leandro.api.v1.model.Product;
@@ -24,7 +24,7 @@ import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@TestMethodOrder(value=MethodOrderer.Alphanumeric.class)
+@TestMethodOrder(value=MethodOrderer.MethodName.class)
 @MicronautTest(application = Application.class)
 public class CatalogueControllerTest {
 
@@ -66,9 +66,7 @@ public class CatalogueControllerTest {
         } catch (ConstraintViolationException e) {
             assertEquals(e.getConstraintViolations().size(), 1);
             Set<ConstraintViolation<?>> violations = e.getConstraintViolations();
-            violations.forEach( constraintViolation -> {
-                assertEquals( constraintViolation.getInvalidValue(), "" );
-            });
+            violations.forEach( constraintViolation -> assertEquals( constraintViolation.getInvalidValue(), "" ));
         }
 
         final CatalogueEntity entity = new CatalogueEntity("Fred", "Harry","photo-1457914109735-ce8aba3b7a79.jpeg")

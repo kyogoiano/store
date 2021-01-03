@@ -16,6 +16,7 @@ import javax.inject.Singleton;
 @Singleton
 public class CatalogueConfigurationDynamoDB {
 
+    String catalogueId = "catalogue_id";
     String databaseName = "catalogue_db";
     String tableName = "catalogue";
     String catalogueVendor = "vendor";

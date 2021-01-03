@@ -1,8 +1,7 @@
 package org.leandro.catalogue.service;
 
-import io.reactivex.SingleSource;
+import io.reactivex.rxjava3.core.Single;
 import org.leandro.api.v1.model.Product;
-import org.leandro.catalogue.integrated.controller.entity.CatalogueEntity;
 import org.reactivestreams.Publisher;
 
 import javax.validation.Valid;
@@ -14,7 +13,7 @@ public interface CatalogueService<T extends Product> {
 
     Publisher<List<T>> findByVendorName(String vendorName);
 
-    Publisher<T> find(String title);
+    Publisher<List<T>> findByTitle(String title);
 
-    SingleSource<T> save(@Valid CatalogueEntity catalogue);
+    Single<T> save(@Valid T product);
 }

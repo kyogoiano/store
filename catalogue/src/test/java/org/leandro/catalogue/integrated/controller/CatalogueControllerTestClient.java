@@ -2,7 +2,7 @@ package org.leandro.catalogue.integrated.controller;
 
 import io.micronaut.http.client.annotation.Client;
 import io.micronaut.validation.Validated;
-import io.reactivex.Single;
+import io.reactivex.rxjava3.core.Single;
 import org.leandro.api.v1.ProductOperations;
 import org.leandro.catalogue.integrated.controller.entity.CatalogueEntity;
 

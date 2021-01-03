@@ -24,9 +24,7 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/CatalogueEntity'
+                $ref: '#/components/schemas/Single_List_CatalogueEntity__'
     post:
       operationId: save
       parameters: []
@@ -42,12 +40,12 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/CatalogueEntity'
-  /${catalogue.api.version}/catalogue/vendor/{name}:
+                $ref: '#/components/schemas/Single_CatalogueEntity_'
+  /${catalogue.api.version}/catalogue/vendor/{vendor}:
     get:
       operationId: byVendor
       parameters:
-      - name: name
+      - name: vendor
         in: path
         required: true
         schema:
@@ -58,12 +56,10 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/CatalogueEntity'
-  /${catalogue.api.version}/catalogue/{title}:
+                $ref: '#/components/schemas/Single_List_CatalogueEntity__'
+  /${catalogue.api.version}/catalogue/title/{title}:
     get:
-      operationId: find
+      operationId: findByTitle
       parameters:
       - name: title
         in: path
@@ -72,18 +68,25 @@ paths:
           type: string
       responses:
         default:
-          description: find default response
+          description: findByTitle default response
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/CatalogueEntity'
+                $ref: '#/components/schemas/Single_List_CatalogueEntity__'
 components:
   schemas:
+    Single_List_CatalogueEntity__:
+      type: object
+    Single_CatalogueEntity_:
+      type: object
     Product:
       required:
       - title
       type: object
       properties:
+        product-id:
+          type: string
+          format: uuid
         title:
           minLength: 1
           type: string
