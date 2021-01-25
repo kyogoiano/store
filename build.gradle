@@ -29,28 +29,39 @@ group 'org.leandro'
 version '1.0-SNAPSHOT'
 
 subprojects { project ->
-
+    task allDeps(type: DependencyReportTask) {}
     apply plugin:"java"
 
+    if(project.name != 'api') {
+        apply plugin:"application"
+        apply plugin: 'com.github.johnrengelman.shadow'
+        shadowJar {
+            mergeServiceFiles()
+        }
+    }
+
+    dependencies {
+        implementation platform("io.micronaut:micronaut-bom:${micronautVersion}")
+        annotationProcessor platform("io.micronaut:micronaut-bom:${micronautVersion}")
         if(project.name != 'api') {
-            apply plugin:"application"
-            apply plugin: 'com.github.johnrengelman.shadow'
-            shadowJar {
-                mergeServiceFiles()
-            }
-        }
+            implementation "io.micronaut:micronaut-discovery-client:2.0.1"
+            implementation("io.micronaut:micronaut-http-client:${micronautVersion}")
+            implementation ("io.netty:netty-handler-proxy:${nettyVersion}")
+            implementation ("io.netty:netty-codec-http2:${nettyVersion}")
+            annotationProcessor "io.micronaut:micronaut-validation:${micronautVersion}"
+            implementation "io.micronaut:micronaut-validation:${micronautVersion}"
 
-        dependencies {
-            if(project.name != 'api') {
-                implementation "io.micronaut:micronaut-discovery-client:2.0.1"
-                implementation("io.micronaut:micronaut-http-client:${micronautVersion}")
-                implementation ("io.netty:netty-handler-proxy:${nettyVersion}")
-                implementation ("io.netty:netty-codec-http2:${nettyVersion}")
-                annotationProcessor "io.micronaut:micronaut-validation:${micronautVersion}"
-                implementation "io.micronaut:micronaut-validation:${micronautVersion}"
-
-                runtimeOnly "io.micronaut:micronaut-management:${micronautVersion}"
-                runtimeOnly "org.apache.logging.log4j:log4j-slf4j-impl:2.14.0"
-            }
+            runtimeOnly "io.micronaut:micronaut-management:${micronautVersion}"
+            runtimeOnly "org.apache.logging.log4j:log4j-slf4j-impl:2.14.0"
         }
+    }
+
+    configurations.all {
+        resolutionStrategy {
+            force 'io.netty:netty-*:${nettyVersion}'
+            force 'io.reactivex.rxjava2:rxjava:2.2.20'
+            force 'org.apache.commons:commons-lang3:3.11'
+            force 'org.slf4j:slf4j-api:1.7.30'
+        }
+    }
 }

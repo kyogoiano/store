@@ -13,8 +13,8 @@ dependencies {
     compileOnly "org.projectlombok:lombok:${lombokVersion}"
 
     implementation "io.micronaut.redis:micronaut-redis-lettuce:3.1.0"
-    implementation "io.micronaut.cache:micronaut-cache-core:2.2.0"
-    implementation "io.lettuce:lettuce-core:6.0.1.RELEASE"
+    implementation "io.micronaut.cache:micronaut-cache-core:2.3.0"
+    implementation "io.lettuce:lettuce-core:6.0.2.RELEASE"
 
 }
 
@@ -31,8 +31,7 @@ configurations {
 
 configurations.all {
     resolutionStrategy {
-        force 'io.netty:netty-*:${nettyVersion}'
-        force 'io.micronaut.cache:micronaut-cache-core:2.2.0'
+        force 'io.micronaut.cache:micronaut-cache-core:2.3.0'
     }
 }
 
