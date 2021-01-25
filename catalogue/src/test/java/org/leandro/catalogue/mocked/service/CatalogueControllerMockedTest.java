@@ -57,7 +57,7 @@ public class CatalogueControllerMockedTest {
 
         verify(publisherMock).subscribe(argumentCaptor.capture());
 
-        assert(argumentCaptor.getValue() instanceof Subscriber);
+        assert(argumentCaptor.getValue() != null);
 
         catalogueController
                 .list()

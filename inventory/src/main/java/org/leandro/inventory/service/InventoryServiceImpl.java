@@ -7,7 +7,6 @@ import org.leandro.inventory.entity.ProductInventory;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
-import java.util.Optional;
 
 import static com.mongodb.client.model.Filters.eq;
 

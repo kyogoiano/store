@@ -7,7 +7,10 @@ import com.mongodb.reactivestreams.client.MongoClients;
 import io.micronaut.context.ApplicationContext;
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest;
 import io.reactivex.rxjava3.core.Flowable;
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.MethodOrderer;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestMethodOrder;
 import org.leandro.api.v1.ProductOperations;
 import org.leandro.api.v1.model.Product;
 import org.leandro.api.v1.model.ProductType;
@@ -31,7 +34,7 @@ public class CatalogueControllerTest {
     @Inject
     ApplicationContext applicationContext;
 
-    static String connectionString = "mongodb://leandro:123@0.0.0.0:27017/catalogue_db";
+    static final String connectionString = "mongodb://leandro:123@0.0.0.0:27017/catalogue_db";
 
     @AfterEach
     public void cleanupData() {
@@ -61,8 +64,8 @@ public class CatalogueControllerTest {
         assertEquals(0, catalogue.size());
 
         try {
-            client.save(new CatalogueEntity("", "", "")).blockingGet();
-            fail("Should have thrown a constraint violation");
+            final CatalogueEntity entity = client.save(new CatalogueEntity("", "", "")).blockingGet();
+            fail("Should have thrown a constraint violation, and not this entity: "+ entity.toString());
         } catch (ConstraintViolationException e) {
             assertEquals(e.getConstraintViolations().size(), 1);
             Set<ConstraintViolation<?>> violations = e.getConstraintViolations();

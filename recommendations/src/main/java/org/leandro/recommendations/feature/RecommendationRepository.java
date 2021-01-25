@@ -42,6 +42,7 @@ public class RecommendationRepository implements RecommendationsOperations {
     private final RedisReactiveCommands<String, String> commands;
 
     {
+        assert redisConnection != null;
         this.commands = redisConnection.reactive();
     }
 
@@ -106,7 +107,6 @@ public class RecommendationRepository implements RecommendationsOperations {
         }
         productClient.find("harry potter")
                 .doOnError(noProductFoundThrowableConsumer())
-                .onErrorComplete()
                 .subscribe(product -> {
                             final Mono<Offer> savedOffer = save(
                                     product,
@@ -121,7 +121,6 @@ public class RecommendationRepository implements RecommendationsOperations {
 
         productClient.find("porter")
                 .doOnError(noProductFoundThrowableConsumer())
-                .onErrorComplete()
                 .subscribe(product -> {
                             final Mono<Offer> savedOffer = save(
                                     product,
@@ -135,7 +134,6 @@ public class RecommendationRepository implements RecommendationsOperations {
 
         productClient.find("Bettle")
                 .doOnError(noProductFoundThrowableConsumer())
-                .onErrorComplete()
                 .subscribe(product -> {
                             final Mono<Offer> savedOffer = save(
                                     product,

@@ -4,12 +4,9 @@ import lombok.extern.slf4j.Slf4j;
 import software.amazon.awssdk.services.dynamodb.DynamoDbAsyncClient;
 import software.amazon.awssdk.services.dynamodb.model.*;
 
-import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.TimeoutException;
 import java.util.function.Supplier;
 
 @Singleton
@@ -57,7 +54,7 @@ public class DynamoDBService {
 
         return client.deleteTable(request).thenComposeAsync(result -> CompletableFuture.completedFuture(true)).exceptionally( throwable -> {
             if (throwable.getCause() instanceof ResourceNotFoundException) {
-                log.info("Non existing table, already droped");
+                log.info("Non existing table, already dropped");
                 return true;
             } else {
                 log.error("Failed dropping table", throwable);

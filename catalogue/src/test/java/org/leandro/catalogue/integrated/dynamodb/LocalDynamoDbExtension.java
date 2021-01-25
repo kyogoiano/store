@@ -12,7 +12,7 @@ public class LocalDynamoDbExtension implements AfterAllCallback, BeforeAllCallba
 
 
     @Override
-    public void afterAll(ExtensionContext context) throws Exception {
+    public void afterAll(ExtensionContext context) {
         stopUnchecked(server);
     }
 

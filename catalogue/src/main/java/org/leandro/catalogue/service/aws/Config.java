@@ -28,7 +28,7 @@ public class Config {
         }
     };
 
-    AwsCredentialsProvider provider = () -> CREDENTIALS;
+    final AwsCredentialsProvider provider = () -> CREDENTIALS;
 
     @Bean
     DynamoDbAsyncClient dynamoDbAsyncClient(){

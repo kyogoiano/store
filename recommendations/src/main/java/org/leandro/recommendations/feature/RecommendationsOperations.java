@@ -4,9 +4,6 @@ import org.leandro.api.v1.model.Offer;
 import org.leandro.api.v1.model.Product;
 import reactor.core.publisher.Mono;
 
-import javax.validation.constraints.Digits;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.time.Duration;
 

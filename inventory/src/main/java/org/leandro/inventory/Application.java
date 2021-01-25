@@ -1,6 +1,5 @@
 package org.leandro.inventory;
 
-import io.micronaut.runtime.Micronaut;
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.info.Contact;
 import io.swagger.v3.oas.annotations.info.Info;
@@ -8,8 +7,6 @@ import io.swagger.v3.oas.annotations.info.License;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
 import javax.inject.Singleton;
-import java.util.Arrays;
-import java.util.stream.Stream;
 
 
 @OpenAPIDefinition(
@@ -38,7 +35,7 @@ public class Application {
 
         //
         char[] chars = test.toCharArray();
-        String result = new String();
+        String result = "";
         for( int i = chars.length; i > 0; i--){
             result = result.concat(String.valueOf(chars[i-1]));
         }

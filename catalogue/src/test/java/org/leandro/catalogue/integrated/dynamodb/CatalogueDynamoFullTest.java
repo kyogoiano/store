@@ -13,7 +13,10 @@ import io.micronaut.http.client.annotation.Client;
 import io.micronaut.http.client.exceptions.HttpClientResponseException;
 import io.micronaut.http.hateoas.JsonError;
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest;
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.MethodOrderer;
+import org.junit.jupiter.api.Order;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestMethodOrder;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.leandro.api.v1.model.ProductType;
 import org.leandro.catalogue.Application;
@@ -56,7 +59,7 @@ public class CatalogueDynamoFullTest {
 
     @Order(0)
     @Test
-    void configureTable() throws InterruptedException, ExecutionException, TimeoutException {
+    void configureTable() throws InterruptedException, ExecutionException {
         System.out.println("Init dropped table ? :" + dynamoDBService.dropTable(configuration.getTableName()).get());
         dynamoDBService.createTableIfNeeded().get();
         ListTablesResponse response = dynamoDBService.listTables().get();
